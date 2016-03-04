@@ -1,12 +1,12 @@
-<div class="container text-center">
+<div class="container">
     <img id="owlBeImg" class="img-responsive img-center" src="/public/img/owlbethere.png" />
     
-    <div class="well">
-        <form ng-submit="sendLocation()">
+    <div class="well text-center">
+        <form ng-submit="localSearch()">
             <div class="form-group">
                 <br>
                 <div class="input-group">
-                    <input ng-model="newOption" name="pollOptions" id="pollOptions" type="text" class="form-control" placeholder="Twit twoo, where are you?">
+                    <input ng-model="userLocation" name="userLocation" id="userLocation" type="text" class="form-control" placeholder="Twit twoo, where are you?">
                     <span class="input-group-btn">
                         <input type="submit" id="submitLocation" class="btn btn-block btn-success" value="Submit Location" />
                     </span>
@@ -15,6 +15,22 @@
         </form>
     </div>
     
+    <div class="list-group">
+      <a ng-repeat="venue in venues.businesses" href="{{ venue.url }}" target="_blank" class="list-group-item">
+        <h4 class="list-group-item-heading">{{ venue.name }}</h4>
+        <p class="list-group-item-text">{{ venue.snippet_text }}</p>
+      </a>
+    </div>
     
-    
+    <div ng-if="venues" class="text-center">
+        <ul class="pagination pagination-sm">
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+        </ul>
+    </div>
+
+  
 </div>
