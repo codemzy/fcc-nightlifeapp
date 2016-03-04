@@ -13,7 +13,8 @@
     "mongodb": "~2.1.6",
     "passport": "~0.3.2",
     "passport-facebook": "~2.1.0",
-    "passport-twitter": "~1.0.4"
+    "passport-twitter": "~1.0.4",
+    "yelp": "~1.0.1"
   },
   "engines": {
     "node": "4.2.4"

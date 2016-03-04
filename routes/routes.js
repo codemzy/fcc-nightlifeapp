@@ -1,5 +1,15 @@
-var bodyParser = require('body-parser');
-var parseUrlencoded = bodyParser.urlencoded({ extended: true });
+require('dotenv').config();
+
+var Yelp = require('yelp');
+
+var opts = {
+  consumer_key: process.env.YELP_KEY,
+  consumer_secret: process.env.YELP_SECRET,
+  token: process.env.YELP_TOKEN,
+  token_secret: process.env.YELP_TOKSEC,
+};
+
+var yelp = new Yelp(opts);
 
 module.exports = function (app, db, passport) {
     
@@ -24,7 +34,17 @@ module.exports = function (app, db, passport) {
         });
         
     // anonomous api's
-
+	app.route('/api/search/:location')
+		.get(function (req, res) {
+			var location = req.params.location;
+			yelp.search({ term: 'bar, pub', location: location })
+			.then(function (data) {
+			  res.json(data);
+			})
+			.catch(function (err) {
+			  console.error(err);
+			});
+		});
 
         
     // registered apis
