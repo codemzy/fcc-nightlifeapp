@@ -2,10 +2,13 @@
 
 html {
   height: 100%;
+  box-sizing: border-box;
 }
 
 body { 
-    padding-bottom: 70px; 
+    position: relative;
+    min-height: 100%;
+    padding-bottom: 150px; 
     background-image:
 radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 15px),
 radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 10px),
