@@ -19,7 +19,7 @@ background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 }
 
 #brand-icon {
-    padding-top: 0px;
+    padding-top: 5px;
     padding-bottom: 0px;
 }
 
@@ -57,4 +57,10 @@ background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 
 #owlBeImg {
     margin-bottom: 20px;
+}
+
+/*BUTTONS*/
+
+.btn-lg {
+    margin-right: 10px;
 }
