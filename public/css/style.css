@@ -64,3 +64,15 @@ background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 .btn-lg {
     margin-right: 10px;
 }
+
+.btn-xs {
+    margin-right: 5px;
+}
+
+/*ELEMENTS*/
+
+.badge-lg {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-left: 5px;
+}

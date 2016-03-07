@@ -42,7 +42,7 @@ module.exports = function (app, db, passport) {
 			  res.json(data);
 			})
 			.catch(function (err) {
-			  console.error(err);
+			  res.status(400).json(err);
 			});
 		});
 		// A ROUTE WITH OFFSET FOR PAGES eg '/api/search/:location/:offset'
@@ -55,7 +55,7 @@ module.exports = function (app, db, passport) {
 			  res.json(data);
 			})
 			.catch(function (err) {
-			  console.error(err);
+			  res.status(400).json(err);
 			});
 		});
         

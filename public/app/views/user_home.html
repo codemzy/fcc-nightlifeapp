@@ -28,10 +28,14 @@
     </div>
     
     <div class="list-group">
-      <a ng-repeat="venue in venues.businesses" href="{{ venue.url }}" target="_blank" class="list-group-item">
-        <h4 class="list-group-item-heading">{{ venue.name }}</h4>
+      <li ng-repeat="venue in venues.businesses" class="list-group-item">
+        <span class="badge badge-lg">{{ going[$index] }}</span>
+        <a ng-click="attendRequest(venue.id)" class="btn btn-default btn-sm pull-right"><i class="fa fa-thumbs-up"></i> Owl Go</a>
+        <h4 class="list-group-item-heading"><a href="{{ venue.url }}" target="_blank">{{ venue.name }}</a></h4>
         <p class="list-group-item-text">{{ venue.snippet_text }}</p>
-      </a>
+        <div ng-if="venue.request" class="text-center text-muted"><small>Would you like to confirm you will be attending this location?</small><br>
+        <button ng-click="attendConfirm(venue.id)" class="btn btn-success btn-xs"><i class="fa fa-thumbs-up"></i> Yes</a><button ng-click="attendCancel(venue.id)" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down"></i> No</button></div>
+      </li>
     </div>
     
     <div ng-if="venues && currentPage == 1" class="text-center">
