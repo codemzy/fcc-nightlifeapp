@@ -10,5 +10,14 @@ angular.module('OwlBeThereApp')
                 return err;
               });
   };
+  this.getOffset = function(location, offset) {
+    return $http.get('/api/search/' + location + '/' + offset)
+              .success(function(data) {
+                return data;
+              })
+              .error(function(err) {
+                return err;
+              });
+  };
   return this;
 }]);

@@ -37,7 +37,7 @@ module.exports = function (app, db, passport) {
 	app.route('/api/search/:location')
 		.get(function (req, res) {
 			var location = req.params.location;
-			yelp.search({ term: 'bar, pub, club, restaurant', location: location })
+			yelp.search({ term: 'bar, pub, club, restaurant', sort:2, location: location, limit:20 })
 			.then(function (data) {
 			  res.json(data);
 			})
@@ -45,8 +45,19 @@ module.exports = function (app, db, passport) {
 			  console.error(err);
 			});
 		});
-		// TO DO A ROUTE WITH OFFSET FOR PAGES eg '/api/search/:location/:offset'
-
+		// A ROUTE WITH OFFSET FOR PAGES eg '/api/search/:location/:offset'
+	app.route('/api/search/:location/:offset')
+		.get(function (req, res) {
+			var location = req.params.location;
+			var offset = parseInt(req.params.offset, 10);
+			yelp.search({ term: 'bar, pub, club, restaurant', location: location, sort:2, offset:offset, limit:20 })
+			.then(function (data) {
+			  res.json(data);
+			})
+			.catch(function (err) {
+			  console.error(err);
+			});
+		});
         
     // registered apis
     app.route('/api/user')
