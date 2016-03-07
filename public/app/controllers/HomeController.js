@@ -27,7 +27,8 @@ angular.module('OwlBeThereApp')
     };
     // FIND OUT WHOS GOING
     $scope.going = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    // FUNCTION TO ATTEND VENUE FOR LOGGED IN USERS
+    $scope.userGoing = [];
+    // FUNCTIONS TO ATTEND VENUE FOR LOGGED IN USERS
     $scope.attendRequest = function(id) {
         for (var i = 0; i < $scope.venues.businesses.length; i++) {
             if ($scope.venues.businesses[i].id == id) {
@@ -48,8 +49,48 @@ angular.module('OwlBeThereApp')
             if ($scope.venues.businesses[i].id == id) {
                 $scope.venues.businesses[i].request = false;
                 $scope.going[i]++;
+                $scope.userGoing.push(id);
             }
         }
         // TO DO backend
+    };
+    // FUNCTIONS TO ATTEND VENUE FOR LOGGED IN USERS
+    $scope.removeRequest = function(id) {
+        for (var i = 0; i < $scope.venues.businesses.length; i++) {
+            if ($scope.venues.businesses[i].id == id) {
+                $scope.venues.businesses[i].remove = true;
+            }
+        }
+    };
+    $scope.removeCancel = function(id) {
+        for (var i = 0; i < $scope.venues.businesses.length; i++) {
+            if ($scope.venues.businesses[i].id == id) {
+                $scope.venues.businesses[i].remove = false;
+            }
+        }
+    };
+    $scope.removeConfirm = function(id) {
+        // front end
+        for (var i = 0; i < $scope.venues.businesses.length; i++) {
+            if ($scope.venues.businesses[i].id == id) {
+                $scope.venues.businesses[i].remove = false;
+                $scope.going[i]--;
+                for(var j = $scope.userGoing.length - 1; j >= 0; j--) {
+                    if($scope.userGoing[j] === id) {
+                       $scope.userGoing.splice(j, 1);
+                    }
+                }
+            }
+        }
+        // TO DO backend
+    };
+    // CHECK IF USER GOING 
+    $scope.checkGoing = function(id) {
+        for (var i = 0; i < $scope.userGoing.length; i++) {
+          if ($scope.userGoing[i] == id) {
+            return true;
+          }
+        }
+        return false;
     };
 }]);
