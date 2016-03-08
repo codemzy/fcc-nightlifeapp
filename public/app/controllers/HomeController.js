@@ -12,7 +12,9 @@ angular.module('OwlBeThereApp')
     };
     // GET IDS WHERE THE USER IS GOING ON PAGE LOAD 
     attend.attendUser().success(function(data) {
-        $scope.userGoing = data.attending;
+        if (data.attending) {
+            $scope.userGoing = data.attending;
+        }
     });
     // GET THE SESSION LOCATION IF THERE IS ONE
     yelp.getSess().success(function(data) {
