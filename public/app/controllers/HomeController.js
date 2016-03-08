@@ -1,11 +1,19 @@
 angular.module('OwlBeThereApp')
 .controller('HomeController', ['$scope', 'yelp', 'attend', '$anchorScroll', function($scope, yelp, attend, $anchorScroll) {
     // FIND OUT WHOS GOING
-    console.log("controller loading");
     $scope.going = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
     $scope.userGoing = [];
+    // function to get numbers of returned results
+    var getNumber = function(id, position) {
+        attend.venueNumbers(id).success(function(data) {
+            $scope.going[position] = data.numbers;
+            return data.numbers;
+        });
+    };
     // GET IDS WHERE THE USER IS GOING ON PAGE LOAD 
-    // TO DO
+    attend.attendUser().success(function(data) {
+        $scope.userGoing = data.attending;
+    });
     // SEARCH FOR VENUES BASED ON LOCATION
     $scope.localSearch = function() {
         if ($scope.userLocation) {
@@ -17,8 +25,10 @@ angular.module('OwlBeThereApp')
                 $scope.venues = data;
                 $scope.totalItems = data.total;
                 // GET NUMBERS
-                
-                
+                for (var i = 0; i < data.businesses.length; i++) {
+                    // run the get number function for each item
+                    getNumber(data.businesses[i].id, i);
+                }
                 $scope.loading = false;
             }).error(function(error) {
                 $scope.loading = false;
@@ -31,6 +41,11 @@ angular.module('OwlBeThereApp')
             $scope.loading = true;
             yelp.getOffset($scope.userLocation, 20).success(function(data) {
                 $scope.venues = data;
+                // GET NUMBERS
+                for (var i = 0; i < data.businesses.length; i++) {
+                    // run the get number function for each item
+                    getNumber(data.businesses[i].id, i);
+                }
                 $scope.loading = false;
             });
         };
@@ -91,6 +106,7 @@ angular.module('OwlBeThereApp')
             }
         }
         // TO DO backend
+        attend.removeVenue(id);
     };
     // CHECK IF USER GOING 
     $scope.checkGoing = function(id) {

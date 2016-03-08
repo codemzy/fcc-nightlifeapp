@@ -29,6 +29,7 @@
     
     <div class="list-group">
       <a ng-repeat="venue in venues.businesses" href="{{ venue.url }}" target="_blank" class="list-group-item">
+        <span class="badge badge-lg">{{ going[$index] }}</span>
         <h4 class="list-group-item-heading">{{ venue.name }}</h4>
         <p class="list-group-item-text">{{ venue.snippet_text }}</p>
       </a>

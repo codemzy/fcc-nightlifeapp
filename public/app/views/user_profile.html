@@ -45,6 +45,21 @@
         </div>
     </div>
     
+    <div class="col-md-12"> 
+        <h3>Activity.</h3>
+        <div ng-if="user.activity[0]">
+            <div class="list-group">
+              <li class="list-group-item list-group-item-default" ng-repeat="activity in user.activity">
+                  You are {{activity.type}} to <b>{{ activity.venue }}</b> on {{ activity.date }}.
+              </li>
+            </div>
+        </div>
+        <div ng-if="!user.activity[0]">
+            <div class="jumbotron text-center">
+              <h3><i class="fa fa-exclamation-circle"></i> No votes yet!</h3>
+            </div>
+        </div>
+    </div>
     
     <div class="col-md-12">
         <h3>Done?</h3>

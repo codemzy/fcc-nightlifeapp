@@ -45,7 +45,7 @@ module.exports = function (app, db, passport) {
 			  res.status(400).json(err);
 			});
 		});
-		// A ROUTE WITH OFFSET FOR PAGES eg '/api/search/:location/:offset'
+		// route with offset for pages
 	app.route('/api/search/:location/:offset')
 		.get(function (req, res) {
 			var location = req.params.location;
@@ -58,12 +58,44 @@ module.exports = function (app, db, passport) {
 			  res.status(400).json(err);
 			});
 		});
+		// route to get venue numbers
+	app.route('/api/numbers/:venue')
+		.get(function (req, res) {
+			var venueID = req.params.venue;
+			db.collection('venues').findOne({ "venue_id": venueID }, function(err, venue) {
+            	if (err) {
+            		console.log(err);
+            		res.status(400).json(err);
+            	} else {
+            		// send the numbers or 0
+            		if (!venue) {
+            			res.json({ numbers: 0 });
+            		} else {
+            			res.json({ numbers: venue.numbers});
+            		}
+            	}
+            });
+		});
         
     // LOGGED IN APIS
     app.route('/api/user')
         .get(isLoggedIn, function(req, res) {
 			res.json(req.user);
         });
+    app.route('/api/user/venues')
+    	.get(isLoggedIn, function(req, res) {
+    		var userID = req.user._id;
+            db.collection('users').findOne({"_id": userID }, {"_id": 0, "attending": 1}, function(err, attending) {
+                if (err) {
+                    // no user found so log the error
+                    console.log("Error: " + err);
+                    res.status(400).json(err);
+                } else {
+                    // user found send back the attending array
+                    res.json(attending);
+                }
+            });
+    	});
     app.route('/api/user/attend/:venueid')
         .get(isLoggedIn, function(req, res) {
             var venueID = req.params.venueid;
@@ -72,6 +104,7 @@ module.exports = function (app, db, passport) {
                 if (err) {
                     // no user found so log the error
                     console.log("Error: " + err);
+                    res.status(400).json(err);
                 } else {
                     // user found add the venue to the going array and activity message
                     var today = new Date;
@@ -88,6 +121,35 @@ module.exports = function (app, db, passport) {
             	} else {
             		// add or update the venue
             		db.collection('venues').update({ "venue_id" : venueID }, { $inc: { "numbers" : 1 } }, { upsert: true, multi: false });
+            		res.send("Finished!");
+            	}
+            });
+        });
+    app.route('/api/user/remove/:venueid')
+        .get(isLoggedIn, function(req, res) {
+            var venueID = req.params.venueid;
+            var userID = req.user._id;
+            db.collection('users').findOne({"_id": userID }, {"_id": 1}, function(err, user) {
+                if (err) {
+                    // no user found so error
+                    console.log("Error: " + err);
+                    res.status(400).json(err);
+                } else {
+                    // user found remove the venue from the going array and add activity message
+                    var today = new Date;
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    var month = months[today.getMonth()];
+                    db.collection('users').update({"_id": req.user._id}, { $pull: { "attending": venueID  }, $push: { "activity": { $each: [{ "venue": venueID, "type": "not going", "date": month + " " + today.getDate() + ", " + today.getFullYear() }], $position: 0, $slice: 50 } } });
+                }
+            });
+            // and add the number to the venue id
+            db.collection('venues').findOne({ "venue_id": venueID }, function(err, venue) {
+            	if (err) {
+            		console.log(err);
+            		res.status(400).json(err);
+            	} else {
+            		// add or update the venue
+            		db.collection('venues').update({ "venue_id" : venueID }, { $inc: { "numbers" : -1 } }, { upsert: true, multi: false });
             		res.send("Finished!");
             	}
             });
