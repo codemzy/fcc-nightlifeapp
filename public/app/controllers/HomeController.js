@@ -1,5 +1,12 @@
 angular.module('OwlBeThereApp')
-.controller('HomeController', ['$scope', 'yelp', '$anchorScroll', function($scope, yelp, $anchorScroll) {
+.controller('HomeController', ['$scope', 'yelp', 'attend', '$anchorScroll', function($scope, yelp, attend, $anchorScroll) {
+    // FIND OUT WHOS GOING
+    console.log("controller loading");
+    $scope.going = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+    $scope.userGoing = [];
+    // GET IDS WHERE THE USER IS GOING ON PAGE LOAD 
+    // TO DO
+    // SEARCH FOR VENUES BASED ON LOCATION
     $scope.localSearch = function() {
         if ($scope.userLocation) {
             $scope.message = false;
@@ -9,6 +16,9 @@ angular.module('OwlBeThereApp')
             yelp.getLocal($scope.userLocation).success(function(data) {
                 $scope.venues = data;
                 $scope.totalItems = data.total;
+                // GET NUMBERS
+                
+                
                 $scope.loading = false;
             }).error(function(error) {
                 $scope.loading = false;
@@ -25,9 +35,6 @@ angular.module('OwlBeThereApp')
             });
         };
     };
-    // FIND OUT WHOS GOING
-    $scope.going = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-    $scope.userGoing = [];
     // FUNCTIONS TO ATTEND VENUE FOR LOGGED IN USERS
     $scope.attendRequest = function(id) {
         for (var i = 0; i < $scope.venues.businesses.length; i++) {
@@ -52,9 +59,10 @@ angular.module('OwlBeThereApp')
                 $scope.userGoing.push(id);
             }
         }
-        // TO DO backend
+        // backend
+        attend.attendVenue(id);
     };
-    // FUNCTIONS TO ATTEND VENUE FOR LOGGED IN USERS
+    // FUNCTIONS TO REMOVE ATTENDING FOR LOGGED IN USERS
     $scope.removeRequest = function(id) {
         for (var i = 0; i < $scope.venues.businesses.length; i++) {
             if ($scope.venues.businesses[i].id == id) {

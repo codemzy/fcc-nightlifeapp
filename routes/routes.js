@@ -33,7 +33,7 @@ module.exports = function (app, db, passport) {
             
         });
         
-    // anonomous api's
+    // ANON APIS
 	app.route('/api/search/:location')
 		.get(function (req, res) {
 			var location = req.params.location;
@@ -59,12 +59,39 @@ module.exports = function (app, db, passport) {
 			});
 		});
         
-    // registered apis
+    // LOGGED IN APIS
     app.route('/api/user')
         .get(isLoggedIn, function(req, res) {
 			res.json(req.user);
         });
-        
+    app.route('/api/user/attend/:venueid')
+        .get(isLoggedIn, function(req, res) {
+            var venueID = req.params.venueid;
+            var userID = req.user._id;
+            db.collection('users').findOne({"_id": userID }, {"_id": 1}, function(err, user) {
+                if (err) {
+                    // no user found so log the error
+                    console.log("Error: " + err);
+                } else {
+                    // user found add the venue to the going array and activity message
+                    var today = new Date;
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    var month = months[today.getMonth()];
+                    db.collection('users').update({"_id": req.user._id}, { $push: { "attending": venueID, "activity": { $each: [{ "venue": venueID, "type": "going", "date": month + " " + today.getDate() + ", " + today.getFullYear() }], $position: 0, $slice: 50 } } });
+                }
+            });
+            // and add the number to the venue id
+            db.collection('venues').findOne({ "venue_id": venueID }, function(err, venue) {
+            	if (err) {
+            		console.log(err);
+            		res.status(400).json(err);
+            	} else {
+            		// add or update the venue
+            		db.collection('venues').update({ "venue_id" : venueID }, { $inc: { "numbers" : 1 } }, { upsert: true, multi: false });
+            		res.send("Finished!");
+            	}
+            });
+        });
         
     // authentication routes (FIRST LOG IN)
         
