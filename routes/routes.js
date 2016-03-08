@@ -36,7 +36,11 @@ module.exports = function (app, db, passport) {
     // ANON APIS
 	app.route('/api/search/:location')
 		.get(function (req, res) {
+			// get the location
 			var location = req.params.location;
+			// put the location in the session
+			req.session.location = location;
+			// search yelp for venues sorted on highest rated
 			yelp.search({ term: 'bar, pub, club, restaurant', sort:2, location: location, limit:20 })
 			.then(function (data) {
 			  res.json(data);
@@ -75,6 +79,15 @@ module.exports = function (app, db, passport) {
             		}
             	}
             });
+		});
+		// route to get session location
+	app.route('/api/session/location')
+		.get(function (req, res) {
+			if (req.session.location) {
+				res.json({ location: req.session.location });
+			} else {
+				res.status(400);
+			}
 		});
         
     // LOGGED IN APIS

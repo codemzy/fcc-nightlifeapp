@@ -1,5 +1,15 @@
 angular.module('OwlBeThereApp')
 .factory('yelp', ['$http', function($http) {
+  // get the session location info
+  this.getSess = function() {
+    return $http.get('/api/session/location')
+              .success(function(data) {
+                return data;
+              })
+              .error(function(err) {
+                return err;
+              });
+  };
   // get the local data from Yelp
   this.getLocal = function(location) {
     return $http.get('/api/search/' + location)

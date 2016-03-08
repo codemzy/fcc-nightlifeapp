@@ -14,6 +14,11 @@ angular.module('OwlBeThereApp')
     attend.attendUser().success(function(data) {
         $scope.userGoing = data.attending;
     });
+    // GET THE SESSION LOCATION IF THERE IS ONE
+    yelp.getSess().success(function(data) {
+        $scope.userLocation = data.location;
+        $scope.localSearch();
+    });
     // SEARCH FOR VENUES BASED ON LOCATION
     $scope.localSearch = function() {
         if ($scope.userLocation) {
