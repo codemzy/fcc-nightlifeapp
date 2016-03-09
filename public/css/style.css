@@ -73,6 +73,14 @@ background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
     margin-right: 5px;
 }
 
+#submitLocation {
+    min-width: 135px;
+}
+
+/*#submitLocation:focus {*/
+/*  outline: none;*/
+/*}*/
+
 /*ELEMENTS*/
 
 .badge-lg {
