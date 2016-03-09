@@ -1,7 +1,7 @@
 {
   "name": "fcc-backend-nightlifeapp",
   "description": "A full stack nightlife coordination app built for a FCC backend project",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "codemzy"
   },
